@@ -137,7 +137,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
-STATIC_URL = '/static/'
+#read static files from the GS Bucket
+GS_STATIC_FILE_BUCKET = 'lmnop-122020.appspot.com'
+STATIC_URL = F'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
 
 
 # Where to send user after successful login, and logout, if no other page is provided.
