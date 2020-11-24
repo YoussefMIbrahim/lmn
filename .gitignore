@@ -13,3 +13,8 @@ venv
 env
 migrations
 debug.log
+.env
+.gcloudignore
+app.yaml
+
+

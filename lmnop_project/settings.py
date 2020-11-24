@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from decouple import config
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -25,7 +27,7 @@ SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -79,23 +81,23 @@ DATABASES = {
 
     # Uncomment this when you are ready to use Postgres.
 
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql',
-    #     'NAME': '',
-    #     'USER' : '',
-    #     'PASSWORD' : os.environ[''],
-    #     'HOST' : '',
-    #     'PORT' : '5432',
-    # },
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'heuizfjm',
+        'USER' : 'heuizfjm',
+        'PASSWORD' : config('LMNOP_DB_PW'),
+        'HOST' : 'otto.db.elephantsql.com',
+        'PORT' : '5432',
+    },
 
     # And when you use Postgres, comment out or remove this DB config. 
     # Using environment variables to detect where this app is running, and automatically use 
     # an appropriate DB configuration, is a good idea.
     
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    # }
 }
 
 
@@ -134,6 +136,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
