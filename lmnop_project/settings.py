@@ -146,4 +146,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
 
+#where user uploaded media will be saved
+GS_BUCKET_NAME = 'lmnop-user-images'
+MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
 
+DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+from google.oauth2 import service_account
+GS_CREDENNTIALS = service_account.Credentials.from_service_account_file('lmnop-credentials.json')
