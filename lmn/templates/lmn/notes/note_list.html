@@ -25,6 +25,10 @@
 
     <p class='note-text'>{{ note.text|truncatechars:100 }}</p>
 
+    {% if note.photo %} <!--show if there is a photo-->
+      <p id="note-photo"><img src="{{ note.photo.url }}"></p>
+    {% endif %}
+
     {% if note.user.username == user.get_username %}
     <form action="{% url 'update_note' note.pk %}" method="POST">
       {% csrf_token %}
@@ -37,9 +41,6 @@
     </form>
     {% endif %}
 
-    {% if note.photo %} <!--show if there is a photo-->
-      <p id="note-photo"><img src="{{ note.photo.url }}"></p>
-    {% endif %}
   </div>  
 
   <hr>

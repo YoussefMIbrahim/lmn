@@ -75,6 +75,6 @@ def delete_note(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     if note.user == request.user:
         note.delete()
-        return redirect('latest_notes')
+        return redirect(request.META['HTTP_REFERER'])
     else:
         return HttpResponseForbidden
