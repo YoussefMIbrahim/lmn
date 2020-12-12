@@ -94,10 +94,6 @@ DATABASES = {
     # Using environment variables to detect where this app is running, and automatically use 
     # an appropriate DB configuration, is a good idea.
     
-<<<<<<< HEAD
-
-=======
->>>>>>> ef6319da9455331890908c5894313ba79661de3f
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
