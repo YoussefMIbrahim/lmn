@@ -17,4 +17,5 @@ debug.log
 .gcloudignore
 app.yaml
 lmnop-credentials.json
+www
 
