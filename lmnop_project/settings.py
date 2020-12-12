@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
-from decouple import config
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -141,22 +141,41 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
+
+#specify a location to copy static files to when running python manage.py collectstatic
 STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
-#read static files from the GS Bucket
-GS_STATIC_FILE_BUCKET = 'lmnop-122020.appspot.com'
-STATIC_URL = F'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+#where in the file system to save user-uploaded files
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+if os.getenv('GAE_INSTANCE'):
+    #read static files from the GS Bucket
+    GS_STATIC_FILE_BUCKET = 'lmnop-122020.appspot.com'
+    
+    STATIC_URL = F'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
 
+    DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
+
+    GS_BUCKET_NAME = 'lmnop-user-images'
+    
+    MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
+
+    from google.oauth2 import service_account
+    GS_CREDENNTIALS = service_account.Credentials.from_service_account_file('lmnop-credentials.json')
+
+else:
+    #developing locally
+    STATIC_URL = '/static/'
+    MEDIA_URL = '/media/'
+
+    
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
 
-#where user uploaded media will be saved
-GS_BUCKET_NAME = 'lmnop-user-images'
-MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
 
-DEFAULT_FILE_STORAGE = 'storages.backends.gcloud.GoogleCloudStorage'
 
-from google.oauth2 import service_account
-GS_CREDENNTIALS = service_account.Credentials.from_service_account_file('lmnop-credentials.json')
+
+
+
+
