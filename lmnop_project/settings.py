@@ -94,7 +94,10 @@ DATABASES = {
     # Using environment variables to detect where this app is running, and automatically use 
     # an appropriate DB configuration, is a good idea.
     
+<<<<<<< HEAD
 
+=======
+>>>>>>> ef6319da9455331890908c5894313ba79661de3f
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
@@ -144,9 +147,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 STATIC_ROOT = os.path.join(BASE_DIR, 'www', 'static')
 
-STATIC_URL = '/static/'
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+#read static files from the GS Bucket
+GS_STATIC_FILE_BUCKET = 'lmnop-122020.appspot.com'
+STATIC_URL = F'https://storage.cloud.google.com/{GS_STATIC_FILE_BUCKET}/static/'
+
 
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'

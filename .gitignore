@@ -21,4 +21,8 @@ www
 cloud_sql_proxy.exe
 git
 media
+.env
+.gcloudignore
+app.yaml
+
 
