@@ -24,8 +24,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+if os.getenv('GAE_INSTANCE'):
+   # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = False
+else:
+    DEBUG= True
 
 ALLOWED_HOSTS = ['*']
 
@@ -168,7 +171,7 @@ else:
     STATIC_URL = '/static/'
     MEDIA_URL = '/media/'
 
-    
+
 # Where to send user after successful login, and logout, if no other page is provided.
 LOGIN_REDIRECT_URL = 'my_user_profile'
 LOGOUT_REDIRECT_URL = 'homepage'
