@@ -83,10 +83,10 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'heuizfjm',
-        'USER' : 'heuizfjm',
-        'PASSWORD' : config('LMNOP_DB_PW'),
-        'HOST' : 'otto.db.elephantsql.com',
+        'NAME': 'lmnop-database',
+        'USER' : 'lmnopuser',
+        'PASSWORD' : os.getenv('LMNOPUSER_PW'),
+        'HOST' : '/cloudsql/lmnop-122020:us-central1:lmnop-db1',
         'PORT' : '5432',
     },
 
@@ -94,11 +94,17 @@ DATABASES = {
     # Using environment variables to detect where this app is running, and automatically use 
     # an appropriate DB configuration, is a good idea.
     
+
     # 'default': {
     #     'ENGINE': 'django.db.backends.sqlite3',
     #     'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     # }
 }
+
+if not os.getenv('GAE_INSTANCE'):
+    DATABASES['default']['HOST']= '127.0.0.1'
+        
+    
 
 
 # Password validation

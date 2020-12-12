@@ -1,5 +1,17 @@
+runtime: python37
+entrypoint: gunicorn -b :$PORT lmnop_project.wsgi
 
+handlers:
+- url: /static
+  static_dir: www/static/
 
+- url: /.*
+  script: auto
 
 env_variables:
+  LMNOPUSER_PW: CapstoneClass
   TICKETMASTER_KEY: gHTG8zLgy3V0Ufmk55MGCKfhGzSMIGlM
+beta_settings:
+  cloud_sql_instances: lmnop-122020:us-central1:lmnop-db1
+
+

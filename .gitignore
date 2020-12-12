@@ -18,4 +18,7 @@ debug.log
 app.yaml
 lmnop-credentials.json
 www
+cloud_sql_proxy.exe
+git
+media
 
