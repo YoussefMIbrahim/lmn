@@ -11,7 +11,8 @@ __pycache__
 # ignore virtual enviroments 
 venv
 env
-migrations
+
+
 debug.log
 .env
 .gcloudignore
@@ -20,9 +21,6 @@ lmnop-credentials.json
 www
 cloud_sql_proxy.exe
 git
-media
+media/
 .env
-.gcloudignore
-app.yaml
-
 

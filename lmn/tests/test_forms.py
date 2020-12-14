@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from django.contrib.auth.models import User
-from lmn.forms import NewNoteForm, UserRegistrationForm
+from lmn.forms import NewNoteForm, UserRegistrationForm, UserProfileForm
 import string
 
 # Test that forms are validating correctly, and don't accept invalid data
@@ -50,7 +50,7 @@ class NewNoteFormTests(TestCase):
 
 
     def test_ok_title_and_length_is_valid(self):
-        form_data = { "title": "blah blah", "text" : "blah, blah, blah."}
+        form_data = { "title": "blah blah", "text" : "blah, blah, blah.", "rating": 5 }
         form = NewNoteForm(form_data)
         self.assertTrue(form.is_valid())
 
@@ -144,3 +144,18 @@ class LoginFormTests(TestCase):
     # TODO username not case sensitive - bob and BOB and Bob are the same
    
     pass
+
+
+class UserProfileFormTests(TestCase):
+    def test_max_length_characters(self):
+        max_characters = 'a' * 201 
+        form_data = { "favorite_Artist": max_characters }
+        form = UserProfileForm(form_data)
+        self.assertFalse(form.is_valid())
+
+
+    def test_non_characters_value(self):
+        form_data = { "favorite_Artist": 123232 }
+        form = UserProfileForm(form_data)
+
+        self.assertTrue(form.is_valid())

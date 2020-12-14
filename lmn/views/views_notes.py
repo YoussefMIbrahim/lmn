@@ -8,6 +8,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponse
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from lmn.views.views_paginate import paginate_data
 
 
 @login_required
@@ -31,14 +33,30 @@ def new_note(request, show_pk):
 
 
 def latest_notes(request):
+
     form = NoteSearchForm()
     search_name = request.GET.get('search_name')
 
     if search_name:
+        # Displays all notes by username
         notes = Note.objects.filter(user__username__icontains=search_name).order_by('-posted_date')
     else:
         notes = Note.objects.all().order_by('-posted_date')
-    return render(request, 'lmn/notes/note_list.html', { 'notes': notes, 'form': form, 'search_term': search_name })
+        
+    #get page number 
+    page_number = request.GET.get('page')
+    # call paginate data function to implement the pagination
+    page_obj = paginate_data(page_number, notes, 4)
+    
+    context = {
+        'notes': notes,
+        'form': form, 
+        'search_term': search_name,
+        'page_obj': page_obj
+    }
+    
+    return render(request, 'lmn/notes/note_list.html', context)
+
 
 
 
@@ -48,6 +66,7 @@ def notes_for_show(request, show_pk):
     search_name = request.GET.get('search_name')
 
     if search_name:
+        # Displays notes for show by username
         notes = Note.objects.filter(user__username__icontains=search_name).filter(show=show_pk).order_by('-posted_date')
         show = Show.objects.get(pk=show_pk) 
     else:
@@ -60,6 +79,10 @@ def note_detail(request, note_pk):
     note = get_object_or_404(Note, pk=note_pk)
     return render(request, 'lmn/notes/note_detail.html' , { 'note': note })
 
+
+def top_shows(request):
+    notes = Note.objects.all().order_by('-rating')
+    return render(request, 'lmn/top_shows.html', { 'notes': notes })
 
 # Updates existing note based off instance, checks for matching user/note pk before allowing updates.
 @login_required
@@ -92,3 +115,5 @@ def delete_note(request, note_pk):
         return redirect(request.META['HTTP_REFERER'])
     else:
         return HttpResponseForbidden
+
+

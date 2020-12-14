@@ -14,6 +14,7 @@ import tempfile
 import filecmp
 import os
 from PIL import Image 
+import shutil
 
 # TODO verify correct templates are rendered.
 
@@ -179,10 +180,11 @@ class TestVenues(TestCase):
             # .* matches 0 or more of any character. Test to see if
             # these names are present, in the right order
 
-            regex = '.*First Avenue.*Target Center.*The Turf Club.*'
+            regex = '.*First Avenue.*Target Center'
             response_text = str(response.content)
-
+            print(response_text)
             self.assertTrue(re.match(regex, response_text))
+            
 
             self.assertEqual(len(response.context['venues']), 3)
             self.assertTemplateUsed(response, 'lmn/venues/venue_list.html')
@@ -361,10 +363,11 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
 
         new_note_url = reverse('new_note', kwargs={'show_pk':1})
 
-        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah', 'rating': 1, 'photo': ''}, follow=True)
 
         # Verify note is in database
-        new_note_query = Note.objects.filter(text='ok', title='blah blah')
+        new_note_query = Note.objects.filter(text='ok', title='blah blah',rating= 1)
+
         self.assertEqual(new_note_query.count(), 1)
 
         # And one more note in DB than before
@@ -373,7 +376,10 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
         # Date correct?
         now = datetime.datetime.today()
         posted_date = new_note_query.first().posted_date
-        self.assertEqual(now.date(), posted_date.date())  # TODO check time too
+        self.assertEqual(now.date(), posted_date.date()) 
+        self.assertEqual(now.hour, posted_date.hour) 
+        self.assertEqual(now.minute, posted_date.minute) 
+        # Skipping seconds because there will always a few seconds different between now and posted time
 
 
     def test_redirect_to_note_detail_after_save(self):
@@ -381,7 +387,7 @@ class TestAddNotesWhenUserLoggedIn(TestCase):
         initial_note_count = Note.objects.count()
 
         new_note_url = reverse('new_note', kwargs={'show_pk':1})
-        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah' }, follow=True)
+        response = self.client.post(new_note_url, {'text':'ok', 'title':'blah blah', 'rating': 5 }, follow=True)
         new_note = Note.objects.filter(text='ok', title='blah blah').first()
 
         self.assertRedirects(response, reverse('note_detail', kwargs={'note_pk': new_note.pk }))
@@ -426,12 +432,20 @@ class TestUserProfile(TestCase):
         logged_in_user = User.objects.get(pk=2)
         self.client.force_login(logged_in_user)  # bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
+        self.assertContains(response, 'You are logged in, <a id="user-link" href="/user/profile/">Bob</a>.')
         
         # Same message on another user's profile. Should still see logged in message 
         # for currently logged in user, in this case, bob
         response = self.client.get(reverse('user_profile', kwargs={'user_pk':3}))
-        self.assertContains(response, 'You are logged in, <a href="/user/profile/2/">Bob</a>.')
+        self.assertContains(response, 'You are logged in, <a id="user-link" href="/user/profile/">Bob</a>.')
+
+    def test_login(self):
+        user = User.objects.get(pk=1)
+        self.client.force_login(user)
+        response = self.client.get(reverse('homepage'))
+        # login message 
+        self.assertContains(response, 'You are logged in, <a id="user-link" href="/user/profile/">Alice</a>.')
+
         
     def test_logout(self):
         user = User.objects.get(pk=1)
@@ -447,8 +461,28 @@ class TestUserProfile(TestCase):
         
         # message to ask user to login or sign up
         self.assertContains(response_redirect, 'Login or sign up')
-        
 
+class TestTopShows(TestCase):
+    fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]
+    
+    def test_top_shows_template(self):
+        response = self.client.get(reverse('top_shows'))
+        self.assertTemplateUsed(response, 'lmn/top_shows.html')
+
+    def test_top_shows_page_correct_rating_order(self):
+
+        response = self.client.get(reverse('top_shows'))
+
+        expected_notes_order = list(Note.objects.all().order_by('-rating'))
+        # Get the first note and expect it will be the top rating which is 5
+        first_note = response.context['notes'][0]
+        second_note = response.context['notes'][1]
+        
+        self.assertEqual(first_note.rating, 5) 
+        # Second note should be 3
+        self.assertEqual(second_note.rating, 3)    
+
+        
 class TestNotes(TestCase):
     fixtures = [ 'testing_users', 'testing_artists', 'testing_venues', 'testing_shows', 'testing_notes' ]  # Have to add artists and venues because of foreign key constrains in show
 
@@ -471,6 +505,39 @@ class TestNotes(TestCase):
         first, second = context[0], context[1]
         self.assertEqual(first.pk, 2)
         self.assertEqual(second.pk, 1)
+
+        
+    def test_noted_search_clear_link(self):
+        response = self.client.get( reverse('latest_notes') , {'search_name' : 'Alice'} )
+        # There is a clear link, it's url is the latest notes page
+        all_notes_url = reverse('latest_notes')
+        self.assertContains(response, all_notes_url)
+
+
+    def test_note_search_no_search_results(self):
+        response = self.client.get( reverse('latest_notes') , {'search_name' : 'Name'} )
+        self.assertNotContains(response, 'NOT')
+        self.assertNotContains(response, 'FOUND')
+        self.assertNotContains(response, 'HERE')
+        # Check the length of notes list is 0
+        self.assertEqual(len(response.context['notes']), 0)
+
+
+    def test_note_search_partial_match_search_results(self):
+        response = self.client.get(reverse('latest_notes'), {'search_name' : 'Alice'})
+        # Should be one responses ("ice")
+        self.assertContains(response, 'ice')
+        self.assertNotContains(response, 'Not Found')
+        # Check the length of notes list is 1
+        self.assertEqual(len(response.context['notes']), 1)
+
+        
+    def test_note_search_one_search_result(self):
+        response = self.client.get(reverse('latest_notes'), {'search_name' : 'Alice'} )
+        self.assertNotContains(response, 'Not Found')
+        self.assertContains(response, 'Alice')
+        # Check the length of notes list is 1
+        self.assertEqual(len(response.context['notes']), 1)
 
 
     def test_correct_templates_uses_for_notes(self):
@@ -513,15 +580,74 @@ class TestUserAuthentication(TestCase):
         # be redirected to the last page they were at, not the homepage.
         response = self.client.post(reverse('register'), {'username':'sam12345', 'email':'sam@sam.com', 'password1':'feRpj4w4pso3az@1!2', 'password2':'feRpj4w4pso3az@1!2', 'first_name':'sam', 'last_name' : 'sam'}, follow=True)
         new_user = authenticate(username='sam12345', password='feRpj4w4pso3az@1!2')
-        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))   
-        self.assertContains(response, 'sam12345')  # page has user's name on it
+
+        self.assertRedirects(response, reverse('user_profile', kwargs={"user_pk": new_user.pk}))
+        self.assertContains(response, 'Sam12345')  # page has user's name on it
+
+class TestUserProfilePage(TestCase):
+    
+    fixtures = ['testing_users', 'testing_user_profile']
+
+    def test_user_not_logged_in_should_get_sent_to_login_page(self):
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertRedirects(response, '/accounts/login/?next=/user/profile/')
+
+    def test_user_profile_page(self):
+        self.client.force_login(User.objects.first())
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertTemplateUsed(response, 'lmn/users/profile.html')
+        self.assertContains(response, 'Username: alice')
+        # should have a Form to update profile
+        self.assertContains(response, 'Update Profile')
+
+    def test_new_user_with_no_data_added(self):
+        user = User.objects.get(pk=3)
+        self.client.force_login(user)
+        response = self.client.get(reverse('my_user_profile'))
+        # User should have their profile model being set up but no data being added on their profile yet
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Artist')
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Venue')
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Show')
+        
+        self.assertContains(response, 'Update Profile')
+
+
+    def test_user_profile_with_populated_data(self):
+        user = User.objects.get(pk=2)
+        self.client.force_login(user)
+        response = self.client.get(reverse('my_user_profile'))
+        self.assertContains(response, 'Favorite Show: Show No2')
+        # Check if only data that is not being added show up on the page
+        self.assertNotContains(response, '<p class="text-secondary">Favorite Artist')
+
+    def test_user_info_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':1}))
+        self.assertContains(response, 'Alibaba')
+        self.assertTemplateUsed(response, 'lmn/users/user_profile.html')
+
+    def test_user_non_existing_info_on_public_profile_page(self):
+        response = self.client.get(reverse('user_profile', kwargs={'user_pk':2}))
+        # This is not being added to the user profile
+        self.assertNotContains(response, 'Favorite Artist')
+
+    def test_user_profile_page_redirect_after_submit(self):
+        self.client.force_login(User.objects.get(pk=2))
+        response = self.client.get(reverse('my_user_profile'))
+        # Redirect the user back to the same page
+        self.assertContains(response, 'action="/user/profile/')
+
 
 class TestImageUpload(TestCase):
+
+    fixtures = ['testing_users', 'testing_venues', 'testing_artists', 'testing_shows']
+
     def setUp(self):
         user = User.objects.get(pk=1)
         self.client.force_login(user)
         self.MEDIA_ROOT = tempfile.mkdtemp()
-        
+    
+    def tearDown(self):
+        shutil.rmtree(self.MEDIA_ROOT)
 
     def create_temp_image_file(self):
         handle, tmp_img_file = tempfile.mkstemp(suffix='.jpg')
@@ -537,15 +663,20 @@ class TestImageUpload(TestCase):
         with self.settings(MEDIA_ROOT=self.MEDIA_ROOT):
         
             with open(img_file_path, 'rb') as img_file:
-                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), {'photo': img_file }, follow=True)
+                new_notes = {
+                    'title': 'Title Test 1234',
+                    'text': 'This is a note section',
+                    'posted_date': '11/12/2020',
+                    'rating': 3,
+                    'photo': img_file
+                }
+                resp = self.client.post(reverse('new_note', kwargs={'show_pk': 1} ), new_notes, follow=True)
                 
                 self.assertEqual(200, resp.status_code)
 
                 note_1 = Note.objects.get(pk=1)
                 img_file_name = os.path.basename(img_file_path)
                 expected_uploaded_file_path = os.path.join(self.MEDIA_ROOT, 'user_images', img_file_name)
-                print(expected_uploaded_file_path)
                 self.assertTrue(os.path.exists(expected_uploaded_file_path))
                 self.assertIsNotNone(note_1.photo)
                 self.assertTrue(filecmp.cmp( img_file_path,  expected_uploaded_file_path ))
-
