@@ -7,7 +7,7 @@ from django.db import IntegrityError
 import logging
 
 
-logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+#logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
 #running the api request and saving the data and returning an ok response
 def get_all_events(request):
@@ -50,7 +50,7 @@ def get_event_data():
         return data
 
     except Exception as e:
-        logging.error(e) #log
+        print(e) #log
         return None
     
 
@@ -88,7 +88,7 @@ def get_and_save_event_information(data):
             except IntegrityError as e:
                 artist = Artist.objects.get(name=artist_name)
                 artist_id = artist.id
-                logging.error(e)
+                print(e)
 
             try:
                 if not Venue.objects.filter(name=venue_name):
@@ -99,7 +99,7 @@ def get_and_save_event_information(data):
             except IntegrityError as e:
                 venue = Venue.objects.get(name=venue_name)
                 venue_id = artist.id
-                logging.error(e)
+                print(e)
 
             try:
 
@@ -107,6 +107,6 @@ def get_and_save_event_information(data):
                     show = Show(show_date= date, artist= Artist.objects.get(pk = artist_id), venue= Venue.objects.get(pk = venue_id))
                     show.save()
             except IntegrityError as e:
-                logging.error(e)
+                print(e)
 
 

@@ -24,11 +24,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'o+do-*x%zn!43h+unn!46(xp$e6&)=y63v#lj3ywjuy8cihz9f'
 
-if os.getenv('GAE_INSTANCE'):
-   # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = False
-else:
-    DEBUG= True
+# if os.getenv('GAE_INSTANCE'):
+#    # SECURITY WARNING: don't run with debug turned on in production!
+#     DEBUG = False
+# else:
+#     DEBUG= True
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -104,7 +105,7 @@ DATABASES = {
 }
 
 if not os.getenv('GAE_INSTANCE'):
-    DATABASES['default']['HOST']= '127.0.0.1'
+    DATABASES['default']['HOST'] = '127.0.0.1'
         
     
 
