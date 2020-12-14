@@ -41,7 +41,7 @@ def get_event_data():
 
     api_key = os.environ.get('TICKETMASTER_KEY')
 
-    params = {'classificaitonName' : 'music', 'city' : 'Minneapolis', 'apikey' : 'gHTG8zLgy3V0Ufmk55MGCKfhGzSMIGlM'}
+    params = {'classificaitonName' : 'music', 'city' : 'Minneapolis', 'apikey' : api_key}
 
     # trying to get a response from the api and returning none if it fails
     try:
