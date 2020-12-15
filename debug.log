@@ -30,3 +30,6 @@
 2020-12-15 15:26:15,756 - asyncio - DEBUG - Using proactor: IocpProactor
 2020-12-15 15:26:33,417 - asyncio - DEBUG - Using proactor: IocpProactor
 2020-12-15 15:26:50,017 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:28:11,845 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:28:26,743 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:58:23,538 - asyncio - DEBUG - Using proactor: IocpProactor
