@@ -13,14 +13,14 @@ venv
 env
 
 
+debug.log
 .env
 .gcloudignore
 app.yaml
-
-lmnop2-credentials.json
-lmnop-credentials.json
-debug.log
+www
 cloud_sql_proxy.exe
-
-
+git
 media/
+.env
+lmnop-credentials.json
+
