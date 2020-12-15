@@ -12,7 +12,7 @@ logging.basicConfig(filename='debug.log', level=logging.DEBUG, format=f'%(asctim
 #running the api request and saving the data and returning an ok response
 def get_all_events(request):
 
-    """This function calls two other functions, and serves to pass data between them, then returns a response depending on if we successfuly exctracted the data or not
+    """Function will return Http response , informing wether or not data collection was successful 
 
     :return: returning an http response depending on wether we got data from the api or not
     :rtype: HttpResponse
@@ -31,7 +31,7 @@ def get_all_events(request):
 
 # getting all the data from the api to send it elsewhere
 def get_event_data():
-    """This function makes a request to the ticketmaster api, and then returns all the raw json data
+    """Makes a request to Ticketmaster api, returns all the JSON data, or none if the data was not reachable
 
     :return: either we return a dictionary with all the json data, or a HttpResponse with an error code
     :rtype: Dictionary
@@ -57,7 +57,7 @@ def get_event_data():
 
 # extracting the useful data from the event data we got above and saving that to the database
 def get_and_save_event_information(data):
-    """This funtion takes all the data that was aquried from the api, parses throguh it getting the useful info, and stores that into our database.
+    """Function takes raw JSON data from ticketmaster API, parses the useful data and stores it into the database
 
     :param data: Json data we got from the database
     :type data: Dictionary
