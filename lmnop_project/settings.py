@@ -87,10 +87,10 @@ DATABASES = {
 
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'lmnop-database',
-        'USER' : 'lmnopuser',
-        'PASSWORD' : os.getenv('LMNOPUSER_PW'),
-        'HOST' : '/cloudsql/lmnop-122020:us-central1:lmnop-db1',
+        'NAME': 'lmnop-db',
+        'USER' : 'abdala',
+        'PASSWORD' : os.getenv('ABDALA_PW'),
+        'HOST' : '/cloudsql/lmnop-122020:us-central1:lmnop-db2',
         'PORT' : '5432',
     },
 
@@ -165,7 +165,7 @@ if os.getenv('GAE_INSTANCE'):
     MEDIA_URL = f'https://storage.cloud.google.com/{GS_BUCKET_NAME}/media/'
 
     from google.oauth2 import service_account
-    GS_CREDENNTIALS = service_account.Credentials.from_service_account_file('lmnop-credentials.json')
+    GS_CREDENTIALS = service_account.Credentials.from_service_account_file('lmnop-credentials.json')
 
 else:
     #developing locally

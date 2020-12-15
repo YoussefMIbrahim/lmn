@@ -17,10 +17,10 @@ debug.log
 .env
 .gcloudignore
 app.yaml
-lmnop-credentials.json
 www
 cloud_sql_proxy.exe
 git
 media/
 .env
+lmnop-credentials.json
 

@@ -9,7 +9,7 @@ handlers:
   script: auto
 
 env_variables:
-  LMNOPUSER_PW: CapstoneClass
+  ABDALA_PW: CapstoneClass2020
   TICKETMASTER_KEY: gHTG8zLgy3V0Ufmk55MGCKfhGzSMIGlM
 beta_settings:
   cloud_sql_instances: lmnop-122020:us-central1:lmnop-db1
