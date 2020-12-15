@@ -1,3 +1,35 @@
 2020-12-13 18:13:24,519 - asyncio - DEBUG - Using selector: SelectSelector
 2020-12-13 18:13:30,146 - asyncio - DEBUG - Using selector: SelectSelector
 2020-12-13 18:13:34,805 - asyncio - DEBUG - Using selector: SelectSelector
+2020-12-15 15:15:05,630 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:15:05,973 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:15:06,364 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:15:06,368 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:15:06,535 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:15:06,539 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:15:06,710 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:15:36,933 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:15:37,241 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:15:37,444 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:15:37,448 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:15:37,610 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:15:37,613 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:15:37,773 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:17:14,798 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:17:15,099 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): app.ticketmaster.com:443
+2020-12-15 15:17:15,362 - urllib3.connectionpool - DEBUG - https://app.ticketmaster.com:443 "GET /discovery/v2/events?classificaitonName=music&city=Minneapolis HTTP/1.1" 401 150
+2020-12-15 15:17:39,526 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:20:25,868 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:20:34,417 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:21:07,109 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:22:50,878 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:23:57,520 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:24:57,415 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:25:13,643 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:25:40,503 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:26:15,756 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:26:33,417 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:26:50,017 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:28:11,845 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:28:26,743 - asyncio - DEBUG - Using proactor: IocpProactor
+2020-12-15 15:58:23,538 - asyncio - DEBUG - Using proactor: IocpProactor
