@@ -50,7 +50,7 @@ def get_event_data():
         return data
 
     except Exception as e:
-        logging.error(e) #log
+        logging.error(e) 
         return None
     
 

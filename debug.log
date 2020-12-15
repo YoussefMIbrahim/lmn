@@ -1,3 +1,4 @@
 2020-12-13 18:13:24,519 - asyncio - DEBUG - Using selector: SelectSelector
 2020-12-13 18:13:30,146 - asyncio - DEBUG - Using selector: SelectSelector
 2020-12-13 18:13:34,805 - asyncio - DEBUG - Using selector: SelectSelector
+2020-12-15 16:07:36,900 - asyncio - DEBUG - Using proactor: IocpProactor
